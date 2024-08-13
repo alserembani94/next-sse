@@ -31,3 +31,14 @@ body {
     text-wrap: balance;
   }
 }
+
+.my-button {
+  background-color: blue;
+  color: white;
+  padding: 16px 32px;
+  border-radius: 8px;
+
+  &:disabled {
+    background-color: gray;
+  }
+}
