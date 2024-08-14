@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { useState } from 'react';
 
 export default function Home() {
+  const [description, setDescription] = useState('');
 
   const getData = async () => {
     try {
@@ -19,10 +21,13 @@ export default function Home() {
 
       const stream = response.data;
       const reader = stream.pipeThrough(new TextDecoderStream()).getReader();
+      setDescription('');
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
-        console.log(value);
+        const data = value.split('data: ')[1];
+        const suggestions = JSON.parse(data).description.suggestion;
+        setDescription((prev) => prev + suggestions);
       }
     } catch(error) {
       console.error('decube-error', error);
@@ -32,7 +37,7 @@ export default function Home() {
   return (
     <div>
       <button onClick={getData} className="my-button">Get Data</button>
-      {/* <p>{data}</p> */}
+      <p>{description}</p>
     </div>
   );
 }
